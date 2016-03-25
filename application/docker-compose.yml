@@ -1,0 +1,32 @@
+version: '2'
+services:
+  interlock:
+    container_name: haproxy
+    image: ehazlett/interlock
+    command: --swarm-url $DOCKER_HOST
+             --swarm-tls-ca-cert=/creds/ca.pem
+             --swarm-tls-cert=/creds/server.pem
+             --swarm-tls-key=/creds/server-key.pem
+             --plugin haproxy
+             start
+    environment:
+       - "constraint:node==swarm-master"
+    volumes:
+       - /mnt/sda1/var/lib/boot2docker:/creds
+    ports:
+       - "80:80"
+    networks:
+       - back
+  webapp:
+    image : hoeghh/phphostname
+    ports:
+       - "80"
+    hostname: web.docker.demo
+    depends_on:
+       - interlock
+    networks:
+       - back 
+networks:
+  back:
+    driver: overlay
+
