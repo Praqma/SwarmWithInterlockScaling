@@ -1,3 +1,7 @@
+---
+maintainer: hoeghh
+---
+
 # Swarm With Interlock Scaling
 
 An example on how to use Interlock to scale Docker Swarm.
